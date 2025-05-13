@@ -26,11 +26,11 @@ public class Bullet : MonoBehaviour
     {
         if (other.CompareTag("Enemy"))
         {
-            // var health = other.GetComponent<Health>();
-            // if (health != null)
-            // {
-            //     //health.TakeDamage(_damage);
-            // }
+            IDamageable damageable = other.GetComponent<IDamageable>();
+            if (damageable != null)
+            {
+                damageable.TakeDamage(_damage);
+            }
         }
         
         Destroy(gameObject);

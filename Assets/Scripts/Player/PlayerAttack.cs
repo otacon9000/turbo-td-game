@@ -40,10 +40,12 @@ public class PlayerAttack : MonoBehaviour
         
         Vector2 mousePoint = _mainCamera.ScreenToWorldPoint(Mouse.current.position.ReadValue());
         Vector2 shootDirection = mousePoint - (Vector2)_bulletSpawn.position;
+        
 
         GameObject bullet = Instantiate(bulletPrefab, _bulletSpawn.position, Quaternion.identity);
         bullet.GetComponent<Bullet>().Initialize(shootDirection);
 
         _lastAttackTime = Time.time;
     }
+    
 }
