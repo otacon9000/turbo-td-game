@@ -298,12 +298,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 035329e7c58bb8243b7b84ae224a9f25, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bulletPrefab: {fileID: 2534131403501566631, guid: e00cf043fb65b044fbefe2f0beea510b, type: 3}
-  _bulletOffset: 0.5
-  _attackFireCooldown: 0.2
-  meleeHitboxPrefab: {fileID: 5985335918756516458, guid: bc0be6a83a0c5f54cba043615ae57699, type: 3}
+  rangedWeapon: {fileID: 11400000, guid: 033ab46e008df4dee9f8d2faab6ef033, type: 2}
+  meleeWeapon: {fileID: 11400000, guid: 0fb88d747bc9c4507b2d9b5a9d071d3a, type: 2}
   _meleePoint: {fileID: 745030127}
-  _attackMeleeCooldown: 0.5
 --- !u!1 &745030126
 GameObject:
   m_ObjectHideFlags: 0
