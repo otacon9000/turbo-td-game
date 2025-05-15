@@ -15,9 +15,18 @@
                     "initialStateCheck": true
                 },
                 {
-                    "name": "Attack",
+                    "name": "AttackFire",
                     "type": "Button",
                     "id": "100442fc-0728-47d0-8368-4e5136c77af1",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "AttackMelee",
+                    "type": "Button",
+                    "id": "0fabd1da-237e-4cb6-a596-ddf850409208",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
@@ -87,7 +96,18 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Attack",
+                    "action": "AttackFire",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "9b217c28-6426-4968-ac4b-1c13880e1506",
+                    "path": "<Mouse>/rightButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "AttackMelee",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
