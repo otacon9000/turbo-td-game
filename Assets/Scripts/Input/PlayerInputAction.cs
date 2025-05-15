@@ -101,9 +101,18 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": true
                 },
                 {
-                    ""name"": ""Attack"",
+                    ""name"": ""AttackFire"",
                     ""type"": ""Button"",
                     ""id"": ""100442fc-0728-47d0-8368-4e5136c77af1"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""AttackMelee"",
+                    ""type"": ""Button"",
+                    ""id"": ""0fabd1da-237e-4cb6-a596-ddf850409208"",
                     ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
@@ -173,7 +182,18 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Attack"",
+                    ""action"": ""AttackFire"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""9b217c28-6426-4968-ac4b-1c13880e1506"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""AttackMelee"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -185,7 +205,8 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
         // Player
         m_Player = asset.FindActionMap("Player", throwIfNotFound: true);
         m_Player_Move = m_Player.FindAction("Move", throwIfNotFound: true);
-        m_Player_Attack = m_Player.FindAction("Attack", throwIfNotFound: true);
+        m_Player_AttackFire = m_Player.FindAction("AttackFire", throwIfNotFound: true);
+        m_Player_AttackMelee = m_Player.FindAction("AttackMelee", throwIfNotFound: true);
     }
 
     ~@PlayerInputAction()
@@ -267,7 +288,8 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
     private readonly InputActionMap m_Player;
     private List<IPlayerActions> m_PlayerActionsCallbackInterfaces = new List<IPlayerActions>();
     private readonly InputAction m_Player_Move;
-    private readonly InputAction m_Player_Attack;
+    private readonly InputAction m_Player_AttackFire;
+    private readonly InputAction m_Player_AttackMelee;
     /// <summary>
     /// Provides access to input actions defined in input action map "Player".
     /// </summary>
@@ -284,9 +306,13 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
         /// </summary>
         public InputAction @Move => m_Wrapper.m_Player_Move;
         /// <summary>
-        /// Provides access to the underlying input action "Player/Attack".
+        /// Provides access to the underlying input action "Player/AttackFire".
         /// </summary>
-        public InputAction @Attack => m_Wrapper.m_Player_Attack;
+        public InputAction @AttackFire => m_Wrapper.m_Player_AttackFire;
+        /// <summary>
+        /// Provides access to the underlying input action "Player/AttackMelee".
+        /// </summary>
+        public InputAction @AttackMelee => m_Wrapper.m_Player_AttackMelee;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -316,9 +342,12 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
             @Move.started += instance.OnMove;
             @Move.performed += instance.OnMove;
             @Move.canceled += instance.OnMove;
-            @Attack.started += instance.OnAttack;
-            @Attack.performed += instance.OnAttack;
-            @Attack.canceled += instance.OnAttack;
+            @AttackFire.started += instance.OnAttackFire;
+            @AttackFire.performed += instance.OnAttackFire;
+            @AttackFire.canceled += instance.OnAttackFire;
+            @AttackMelee.started += instance.OnAttackMelee;
+            @AttackMelee.performed += instance.OnAttackMelee;
+            @AttackMelee.canceled += instance.OnAttackMelee;
         }
 
         /// <summary>
@@ -333,9 +362,12 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
             @Move.started -= instance.OnMove;
             @Move.performed -= instance.OnMove;
             @Move.canceled -= instance.OnMove;
-            @Attack.started -= instance.OnAttack;
-            @Attack.performed -= instance.OnAttack;
-            @Attack.canceled -= instance.OnAttack;
+            @AttackFire.started -= instance.OnAttackFire;
+            @AttackFire.performed -= instance.OnAttackFire;
+            @AttackFire.canceled -= instance.OnAttackFire;
+            @AttackMelee.started -= instance.OnAttackMelee;
+            @AttackMelee.performed -= instance.OnAttackMelee;
+            @AttackMelee.canceled -= instance.OnAttackMelee;
         }
 
         /// <summary>
@@ -384,11 +416,18 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnMove(InputAction.CallbackContext context);
         /// <summary>
-        /// Method invoked when associated input action "Attack" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// Method invoked when associated input action "AttackFire" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>
         /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnAttack(InputAction.CallbackContext context);
+        void OnAttackFire(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "AttackMelee" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnAttackMelee(InputAction.CallbackContext context);
     }
 }

@@ -7,7 +7,7 @@ public class PlayerAttack : MonoBehaviour
 {
     [Header("Fire Attack")]
     public GameObject bulletPrefab;
-    [SerializeField] private Transform _bulletSpawn;
+    [SerializeField] private float _bulletOffset = 0.5f;
     [SerializeField] private float _attackFireCooldown = 0.2f;
 
     [Header("Melee Attack")]
@@ -15,10 +15,10 @@ public class PlayerAttack : MonoBehaviour
     [SerializeField] private Transform _meleePoint;
     [SerializeField] private float _attackMeleeCooldown = 0.5f;
 
-    private bool canAttack = true;
+    private bool canShoot = true;
+    private bool canMelee = true;
     
     private Camera _mainCamera;
-    private float _lastAttackTime;
     private PlayerInputAction _inputAction;
 
     private void Awake()
@@ -30,43 +30,43 @@ public class PlayerAttack : MonoBehaviour
     private void OnEnable()
     {
         _inputAction.Player.Enable();
-        _inputAction.Player.Attack.performed += OnAttackFire;
-        _inputAction.Player.Attack.performed += OnAttackMelee;
+        _inputAction.Player.AttackFire.performed += OnAttackFire;
+        _inputAction.Player.AttackMelee.performed += OnAttackMelee;
     }
 
     private void OnDisable()
     {
-        _inputAction.Player.Attack.performed -= OnAttackFire; 
-        _inputAction.Player.Attack.performed -= OnAttackMelee; 
+        _inputAction.Player.AttackFire.performed -= OnAttackFire; 
+        _inputAction.Player.AttackMelee.performed -= OnAttackMelee; 
         _inputAction.Player.Disable();
     }
 
     private void OnAttackFire(InputAction.CallbackContext context)
     {
-        if (Time.time - _lastAttackTime < _attackFireCooldown) return;
+        if (!canShoot) return;
         
-        Vector2 mousePoint = _mainCamera.ScreenToWorldPoint(Mouse.current.position.ReadValue());
-        Vector2 shootDirection = mousePoint - (Vector2)_bulletSpawn.position;
+        Vector2 mousePos = _mainCamera.ScreenToWorldPoint(Mouse.current.position.ReadValue());
+        Vector2 direction  = (mousePos - (Vector2)transform.position).normalized;
+        Vector2 spawnPos = (Vector2)transform.position + direction * _bulletOffset;
         
 
-        GameObject bullet = Instantiate(bulletPrefab, _bulletSpawn.position, Quaternion.identity);
-        bullet.GetComponent<Bullet>().Initialize(shootDirection);
+        GameObject bullet = Instantiate(bulletPrefab,spawnPos, Quaternion.identity);
+        bullet.GetComponent<Bullet>().Initialize(direction);
 
-        _lastAttackTime = Time.time;
+        canShoot = false; 
+        Invoke(nameof(ResetFireAttack), _attackFireCooldown);
     }
     
     private void OnAttackMelee(InputAction.CallbackContext context)
     {
-        if (!canAttack) return;
+        if (!canMelee) return;
 
         GameObject hitbox = Instantiate(meleeHitboxPrefab, _meleePoint.position, _meleePoint.rotation);
-        canAttack = false;
-        Invoke(nameof(ResetAttack), _attackMeleeCooldown);
+        canMelee = false;
+        Invoke(nameof(ResetMeleeAttack), _attackMeleeCooldown);
     }
     
-    private void ResetAttack()
-    {
-        canAttack = true;
-    }
+    private void ResetFireAttack() => canShoot = true;
+    private void ResetMeleeAttack() => canMelee = true;
     
 }
