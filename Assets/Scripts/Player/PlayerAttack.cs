@@ -1,4 +1,4 @@
-
+using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -48,25 +48,33 @@ public class PlayerAttack : MonoBehaviour
         Vector2 mousePos = _mainCamera.ScreenToWorldPoint(Mouse.current.position.ReadValue());
         Vector2 direction  = (mousePos - (Vector2)transform.position).normalized;
         Vector2 spawnPos = (Vector2)transform.position + direction * _bulletOffset;
-        
 
         GameObject bullet = Instantiate(bulletPrefab,spawnPos, Quaternion.identity);
         bullet.GetComponent<Bullet>().Initialize(direction);
 
-        canShoot = false; 
-        Invoke(nameof(ResetFireAttack), _attackFireCooldown);
+        StartCoroutine(ShootCooldownRoutine());
     }
     
     private void OnAttackMelee(InputAction.CallbackContext context)
     {
         if (!canMelee) return;
 
-        GameObject hitbox = Instantiate(meleeHitboxPrefab, _meleePoint.position, _meleePoint.rotation);
-        canMelee = false;
-        Invoke(nameof(ResetMeleeAttack), _attackMeleeCooldown);
+        Instantiate(meleeHitboxPrefab, _meleePoint.position, _meleePoint.rotation);
+
+        StartCoroutine(MeleeCooldownRoutine());
     }
-    
-    private void ResetFireAttack() => canShoot = true;
-    private void ResetMeleeAttack() => canMelee = true;
-    
+
+    private IEnumerator ShootCooldownRoutine()
+    {
+        canShoot = false;
+        yield return new WaitForSeconds(_attackFireCooldown);
+        canShoot = true;
+    }
+
+    private IEnumerator MeleeCooldownRoutine()
+    {
+        canMelee = false;
+        yield return new WaitForSeconds(_attackMeleeCooldown);
+        canMelee = true;
+    }
 }
