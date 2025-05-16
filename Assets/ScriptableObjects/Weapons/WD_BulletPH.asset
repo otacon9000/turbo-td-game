@@ -10,12 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9a90236c17dca4d10be6554bd941ee44, type: 3}
-  m_Name: Ranged_WD
+  m_Name: WD_BulletPH
   m_EditorClassIdentifier: 
   weaponType: 0
-  cooldown: 0.2
+  cooldown: 0.5
   damage: 1
+  targetTag: Enemy
   projectilePrefab: {fileID: 2534131403501566631, guid: e00cf043fb65b044fbefe2f0beea510b, type: 3}
-  projectileSpawnOffset: 0.5
+  projectileSpawnOffset: 0.02
+  projectileSpeed: 10
+  projectileLifetime: 2
   meleeHitboxPrefab: {fileID: 0}
-  relativeHitboxOrigin: {fileID: 0}
+  meleeDuration: 0.1

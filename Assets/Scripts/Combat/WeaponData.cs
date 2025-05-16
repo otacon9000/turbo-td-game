@@ -1,4 +1,5 @@
 using UnityEngine;
+using NaughtyAttributes;
 
 public enum WeaponType
 {
@@ -14,12 +15,21 @@ public class WeaponData : ScriptableObject
     [Header("Shared")]
     public float cooldown = 0.5f;
     public int damage = 1;
+    public string targetTag = "Enemy";
 
     [Header("Ranged")]
+    [ShowIf("weaponType", WeaponType.Ranged)]
     public GameObject projectilePrefab;
+    [ShowIf("weaponType", WeaponType.Ranged)]
     public float projectileSpawnOffset = 0.5f;
+    [ShowIf("weaponType", WeaponType.Ranged)]
+    public float projectileSpeed = 10f;
+    [ShowIf("weaponType", WeaponType.Ranged)]
+    public float projectileLifetime = 2f;
 
     [Header("Melee")]
+    [ShowIf("weaponType", WeaponType.Melee)]
     public GameObject meleeHitboxPrefab;
-    public Transform relativeHitboxOrigin; // opzionale se vuoi prefab dinamico con offset
+    [ShowIf("weaponType", WeaponType.Melee)]
+    public float meleeDuration = 0.1f;
 }

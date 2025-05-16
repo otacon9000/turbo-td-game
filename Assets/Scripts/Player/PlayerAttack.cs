@@ -46,8 +46,15 @@ public class PlayerAttack : MonoBehaviour
         Vector2 direction  = (mousePos - (Vector2)transform.position).normalized;
         Vector2 spawnPos = (Vector2)transform.position + direction * rangedWeapon.projectileSpawnOffset;
 
-        GameObject bullet = Instantiate(rangedWeapon.projectilePrefab,spawnPos, Quaternion.identity);
-        bullet.GetComponent<Bullet>().Initialize(direction);
+        GameObject bulletGO = Instantiate(rangedWeapon.projectilePrefab, spawnPos, Quaternion.identity);
+        var bullet = bulletGO.GetComponent<Bullet>();
+        bullet.Initialize(
+            direction,
+            rangedWeapon.projectileSpeed,
+            rangedWeapon.projectileLifetime,
+            rangedWeapon.damage,
+            rangedWeapon.targetTag
+        );
 
         StartCoroutine(ShootCooldownRoutine(rangedWeapon.cooldown));
     }
@@ -56,8 +63,14 @@ public class PlayerAttack : MonoBehaviour
     {
         if (!canMelee || meleeWeapon == null || meleeWeapon.weaponType != WeaponType.Melee)
             return;
-        
-        Instantiate(meleeWeapon.meleeHitboxPrefab, _meleePoint.position, _meleePoint.rotation);
+
+        GameObject meleeGO = Instantiate(meleeWeapon.meleeHitboxPrefab, _meleePoint.position, _meleePoint.rotation);
+        var melee = meleeGO.GetComponent<MeleeHitbox>();
+        melee.Initialize(
+            meleeWeapon.damage,
+            meleeWeapon.meleeDuration,
+            meleeWeapon.targetTag
+        );
 
         StartCoroutine(MeleeCooldownRoutine(meleeWeapon.cooldown));
     }

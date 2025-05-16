@@ -10,12 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9a90236c17dca4d10be6554bd941ee44, type: 3}
-  m_Name: Melee_WD
+  m_Name: WD_MeleePH
   m_EditorClassIdentifier: 
   weaponType: 1
   cooldown: 0.5
   damage: 1
+  targetTag: Enemy
   projectilePrefab: {fileID: 0}
   projectileSpawnOffset: 0.5
+  projectileSpeed: 10
+  projectileLifetime: 2
   meleeHitboxPrefab: {fileID: 5985335918756516458, guid: bc0be6a83a0c5f54cba043615ae57699, type: 3}
-  relativeHitboxOrigin: {fileID: 0}
+  meleeDuration: 0.2

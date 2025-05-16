@@ -2,37 +2,38 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
-    [SerializeField]
-    private float _speed = 10f;
-    [SerializeField]
-    private float _lifeTime = 3f;
-    [SerializeField]
-    private int _damage = 1;
+    private Vector2 direction;
+    private float speed;
+    private float lifetime;
+    private int damage;
+    private string targetTag;
 
-    private Vector2 _direction;
-
-    public void Initialize(Vector2 dir)
+    public void Initialize(Vector2 dir, float speed, float lifetime, int damage, string targetTag)
     {
-        _direction = dir.normalized;
-        Destroy(gameObject, _lifeTime);
+        this.direction = dir.normalized;
+        this.speed = speed;
+        this.lifetime = lifetime;
+        this.damage = damage;
+        this.targetTag = targetTag;
+
+        Destroy(gameObject, lifetime);
     }
 
     private void Update()
     {
-        transform.Translate(_direction * (_speed * Time.deltaTime));
+        transform.Translate(direction * (speed * Time.deltaTime));
     }
 
-    private void OnTriggerEnter2D(Collider2D other)
+    private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (other.CompareTag("Enemy"))
+        if (!collision.CompareTag(targetTag)) return;
+
+        IDamageable damageable = collision.GetComponent<IDamageable>();
+        if (damageable != null)
         {
-            IDamageable damageable = other.GetComponent<IDamageable>();
-            if (damageable != null)
-            {
-                damageable.TakeDamage(_damage);
-            }
+            damageable.TakeDamage(damage);
         }
-        
+
         Destroy(gameObject);
     }
 }
