@@ -1,30 +1,27 @@
-
+using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 
 public class PlayerAttack : MonoBehaviour
 {
-    [Header("Fire Attack")]
-    public GameObject bulletPrefab;
-    [SerializeField] private float _bulletOffset = 0.5f;
-    [SerializeField] private float _attackFireCooldown = 0.2f;
-
-    [Header("Melee Attack")]
-    public GameObject meleeHitboxPrefab;
+    [Header("Weapon Data")]
+    public WeaponData rangedWeapon;
+    public WeaponData meleeWeapon;
+    
     [SerializeField] private Transform _meleePoint;
-    [SerializeField] private float _attackMeleeCooldown = 0.5f;
-
-    private bool canShoot = true;
-    private bool canMelee = true;
     
     private Camera _mainCamera;
     private PlayerInputAction _inputAction;
+    private MeleeAttackHandler _meleeHandler;
+    private RangedAttackHandler _rangedHandler;
 
     private void Awake()
     {
         _inputAction = new PlayerInputAction();
         _mainCamera = Camera.main;
+        _meleeHandler = new MeleeAttackHandler(_meleePoint, meleeWeapon, this);
+        _rangedHandler = new RangedAttackHandler(transform, rangedWeapon, this);
     }
 
     private void OnEnable()
@@ -43,30 +40,22 @@ public class PlayerAttack : MonoBehaviour
 
     private void OnAttackFire(InputAction.CallbackContext context)
     {
-        if (!canShoot) return;
+        // if (!canShoot || rangedWeapon == null || rangedWeapon.weaponType != WeaponType.Ranged)
+        //     return;
         
-        Vector2 mousePos = _mainCamera.ScreenToWorldPoint(Mouse.current.position.ReadValue());
-        Vector2 direction  = (mousePos - (Vector2)transform.position).normalized;
-        Vector2 spawnPos = (Vector2)transform.position + direction * _bulletOffset;
-        
-
-        GameObject bullet = Instantiate(bulletPrefab,spawnPos, Quaternion.identity);
-        bullet.GetComponent<Bullet>().Initialize(direction);
-
-        canShoot = false; 
-        Invoke(nameof(ResetFireAttack), _attackFireCooldown);
+        Vector2 mousePosition = _mainCamera.ScreenToWorldPoint(Mouse.current.position.ReadValue());
+        if (_rangedHandler.CanAttack)
+        {
+            _rangedHandler.Execute(mousePosition);
+        }
     }
     
     private void OnAttackMelee(InputAction.CallbackContext context)
     {
-        if (!canMelee) return;
-
-        GameObject hitbox = Instantiate(meleeHitboxPrefab, _meleePoint.position, _meleePoint.rotation);
-        canMelee = false;
-        Invoke(nameof(ResetMeleeAttack), _attackMeleeCooldown);
+        Vector2 mousePosition = _mainCamera.ScreenToWorldPoint(Mouse.current.position.ReadValue());
+        if (_meleeHandler.CanAttack)
+        {
+            _meleeHandler.Execute(mousePosition);
+        }
     }
-    
-    private void ResetFireAttack() => canShoot = true;
-    private void ResetMeleeAttack() => canMelee = true;
-    
 }

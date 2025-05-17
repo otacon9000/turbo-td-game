@@ -3,19 +3,19 @@ using UnityEngine;
 public class Health : MonoBehaviour, IDamageable
 {
     [SerializeField] private int _maxHealth = 3;
-    private int currentHealth;
+    private int _currentHealth;
 
     private void Awake()
     {
-        currentHealth = _maxHealth;
+        _currentHealth = _maxHealth;
     }
 
     public void TakeDamage(int amount)
     {
-        currentHealth -= amount;
+        _currentHealth -= amount;
         Debug.Log("damage");
 
-        if (currentHealth <= 0)
+        if (_currentHealth <= 0)
         {
             Die();
         }

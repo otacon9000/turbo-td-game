@@ -2,19 +2,21 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
-    [SerializeField]
-    private float _speed = 10f;
-    [SerializeField]
-    private float _lifeTime = 3f;
-    [SerializeField]
-    private int _damage = 1;
-
     private Vector2 _direction;
+    private float _speed;
+    private float _lifetime;
+    private int _damage;
+    private string _targetTag;
 
-    public void Initialize(Vector2 dir)
+    public void Initialize(Vector2 dir, float speed, float lifetime, int damage, string targetTag)
     {
-        _direction = dir.normalized;
-        Destroy(gameObject, _lifeTime);
+        this._direction = dir.normalized;
+        this._speed = speed;
+        this._lifetime = lifetime;
+        this._damage = damage;
+        this._targetTag = targetTag;
+
+        Destroy(gameObject, lifetime);
     }
 
     private void Update()
@@ -22,17 +24,16 @@ public class Bullet : MonoBehaviour
         transform.Translate(_direction * (_speed * Time.deltaTime));
     }
 
-    private void OnTriggerEnter2D(Collider2D other)
+    private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (other.CompareTag("Enemy"))
+        if (!collision.CompareTag(_targetTag)) return;
+
+        IDamageable damageable = collision.GetComponent<IDamageable>();
+        if (damageable != null)
         {
-            IDamageable damageable = other.GetComponent<IDamageable>();
-            if (damageable != null)
-            {
-                damageable.TakeDamage(_damage);
-            }
+            damageable.TakeDamage(_damage);
         }
-        
+
         Destroy(gameObject);
     }
 }
