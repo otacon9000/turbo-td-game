@@ -10,17 +10,18 @@ public class PlayerAttack : MonoBehaviour
     public WeaponData meleeWeapon;
     
     [SerializeField] private Transform _meleePoint;
-
-    private bool canShoot = true;
-    private bool canMelee = true;
     
     private Camera _mainCamera;
     private PlayerInputAction _inputAction;
+    private MeleeAttackHandler _meleeHandler;
+    private RangedAttackHandler _rangedHandler;
 
     private void Awake()
     {
         _inputAction = new PlayerInputAction();
         _mainCamera = Camera.main;
+        _meleeHandler = new MeleeAttackHandler(_meleePoint, meleeWeapon, this);
+        _rangedHandler = new RangedAttackHandler(transform, rangedWeapon, this);
     }
 
     private void OnEnable()
@@ -39,53 +40,22 @@ public class PlayerAttack : MonoBehaviour
 
     private void OnAttackFire(InputAction.CallbackContext context)
     {
-        if (!canShoot || rangedWeapon == null || rangedWeapon.weaponType != WeaponType.Ranged)
-            return;
+        // if (!canShoot || rangedWeapon == null || rangedWeapon.weaponType != WeaponType.Ranged)
+        //     return;
         
-        Vector2 mousePos = _mainCamera.ScreenToWorldPoint(Mouse.current.position.ReadValue());
-        Vector2 direction  = (mousePos - (Vector2)transform.position).normalized;
-        Vector2 spawnPos = (Vector2)transform.position + direction * rangedWeapon.projectileSpawnOffset;
-
-        GameObject bulletGO = Instantiate(rangedWeapon.projectilePrefab, spawnPos, Quaternion.identity);
-        var bullet = bulletGO.GetComponent<Bullet>();
-        bullet.Initialize(
-            direction,
-            rangedWeapon.projectileSpeed,
-            rangedWeapon.projectileLifetime,
-            rangedWeapon.damage,
-            rangedWeapon.targetTag
-        );
-
-        StartCoroutine(ShootCooldownRoutine(rangedWeapon.cooldown));
+        Vector2 mousePosition = _mainCamera.ScreenToWorldPoint(Mouse.current.position.ReadValue());
+        if (_rangedHandler.CanAttack)
+        {
+            _rangedHandler.Execute(mousePosition);
+        }
     }
     
     private void OnAttackMelee(InputAction.CallbackContext context)
     {
-        if (!canMelee || meleeWeapon == null || meleeWeapon.weaponType != WeaponType.Melee)
-            return;
-
-        GameObject meleeGO = Instantiate(meleeWeapon.meleeHitboxPrefab, _meleePoint.position, _meleePoint.rotation);
-        var melee = meleeGO.GetComponent<MeleeHitbox>();
-        melee.Initialize(
-            meleeWeapon.damage,
-            meleeWeapon.meleeDuration,
-            meleeWeapon.targetTag
-        );
-
-        StartCoroutine(MeleeCooldownRoutine(meleeWeapon.cooldown));
-    }
-
-    private IEnumerator ShootCooldownRoutine(float duration)
-    {
-        canShoot = false;
-        yield return new WaitForSeconds(duration);
-        canShoot = true;
-    }
-
-    private IEnumerator MeleeCooldownRoutine(float duration)
-    {
-        canMelee = false;
-        yield return new WaitForSeconds(duration);
-        canMelee = true;
+        Vector2 mousePosition = _mainCamera.ScreenToWorldPoint(Mouse.current.position.ReadValue());
+        if (_meleeHandler.CanAttack)
+        {
+            _meleeHandler.Execute(mousePosition);
+        }
     }
 }

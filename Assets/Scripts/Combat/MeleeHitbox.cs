@@ -2,26 +2,26 @@ using UnityEngine;
 
 public class MeleeHitbox : MonoBehaviour
 {
-    private int damage;
-    private float duration;
-    private string targetTag;
+    private int _damage;
+    private float _duration;
+    private string _targetTag;
 
     public void Initialize(int damage, float duration, string targetTag)
     {
-        this.damage = damage;
-        this.duration = duration;
-        this.targetTag = targetTag;
+        this._damage = damage;
+        this._duration = duration;
+        this._targetTag = targetTag;
         Destroy(gameObject, duration);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (!collision.CompareTag(targetTag)) return;
+        if (!collision.CompareTag(_targetTag)) return;
 
         IDamageable damageable = collision.GetComponent<IDamageable>();
         if (damageable != null)
         {
-            damageable.TakeDamage(damage);
+            damageable.TakeDamage(_damage);
         }
     }
 }
