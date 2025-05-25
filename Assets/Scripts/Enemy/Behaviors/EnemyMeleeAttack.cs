@@ -1,14 +1,18 @@
 using System.Collections;
 using UnityEngine;
 
-public class EnemyAttack : MonoBehaviour
+public class EnemyMeleeAttack : EnemyAttackBase
 {
     private EnemyData data;
     private bool canAttack = true;
     private Transform player;
     public Transform attackPoint;
 
-    public void SetData(EnemyData d) => data = d;
+    public override void SetData(EnemyData d)
+    {
+        data = d;
+    }
+
 
     private void Start()
     {
@@ -23,8 +27,16 @@ public class EnemyAttack : MonoBehaviour
         float angle = Mathf.Atan2(toPlayer.y, toPlayer.x) * Mathf.Rad2Deg;
         attackPoint.rotation = Quaternion.Euler(0, 0, angle - 90);
 
+        ExecuteAttack();
+    }
+
+    public override bool CanAttack => canAttack;
+
+    public override void ExecuteAttack()
+    {
         StartCoroutine(AttackRoutine());
     }
+    
 
     private IEnumerator AttackRoutine()
     {

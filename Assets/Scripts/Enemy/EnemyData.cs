@@ -3,6 +3,14 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "NewEnemy", menuName = "Enemies/EnemyData")]
 public class EnemyData : ScriptableObject
 {
+    public enum EnemyAttackType
+    {
+        Melee,
+        Ranged
+    }
+
+    [Header("Attack Type")] public EnemyAttackType attackType = EnemyAttackType.Melee;
+    
     [Header("Behavior")]
     public float patrolSpeed = 2f;
     public float chaseSpeed = 2.5f;

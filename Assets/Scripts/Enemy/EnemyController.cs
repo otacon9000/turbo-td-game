@@ -1,13 +1,13 @@
 using UnityEngine;
 
-[RequireComponent(typeof(EnemyPatrol), typeof(EnemyChase), typeof(EnemyAttack))]
+[RequireComponent(typeof(EnemyPatrol), typeof(EnemyChase))]
 public class EnemyController : MonoBehaviour
 {
     public EnemyData data;
     private Transform player;
     private EnemyPatrol patrol;
     private EnemyChase chase;
-    private EnemyAttack attack;
+    private EnemyAttackBase attack;
 
     private enum EnemyState { Patrolling, Chasing, Attacking }
     private EnemyState currentState;
@@ -16,14 +16,13 @@ public class EnemyController : MonoBehaviour
     {
         patrol = GetComponent<EnemyPatrol>();
         chase = GetComponent<EnemyChase>();
-        attack = GetComponent<EnemyAttack>();
+        attack = GetComponent<EnemyAttackBase>();
 
         player = GameObject.FindGameObjectWithTag("Player")?.transform;
 
-        // Inizializza con dati dal SO
         patrol.SetSpeed(data.patrolSpeed);
         chase.SetSpeed(data.chaseSpeed);
-        attack.SetData(data);
+        if (attack != null) attack.SetData(data);
     }
 
     private void Update()
@@ -41,7 +40,7 @@ public class EnemyController : MonoBehaviour
 
         patrol.enabled = currentState == EnemyState.Patrolling;
         chase.enabled = currentState == EnemyState.Chasing;
-        attack.enabled = currentState == EnemyState.Attacking;
+        if (attack != null) ((MonoBehaviour)attack).enabled = currentState == EnemyState.Attacking;
     }
 
     private void SetState(EnemyState newState)
