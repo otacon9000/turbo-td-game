@@ -1,18 +1,21 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyData : MonoBehaviour
+[CreateAssetMenu(fileName = "NewEnemy", menuName = "Enemies/EnemyData")]
+public class EnemyData : ScriptableObject
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    [Header("Behavior")]
+    public float patrolSpeed = 2f;
+    public float chaseSpeed = 2.5f;
+    public float chaseDistance = 5f;
+    public float attackDistance = 1.5f;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    [Header("Attack")]
+    public int damage = 1;
+    public float attackCooldown = 1.5f;
+    public float hitboxDuration = 0.2f;
+    public GameObject attackHitboxPrefab;
+
+    [Header("General")]
+    public int maxHealth = 3;
+    public string targetTag = "Player";
 }

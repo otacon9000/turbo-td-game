@@ -3,18 +3,14 @@ using UnityEngine;
 [RequireComponent(typeof(EnemyPatrol), typeof(EnemyChase), typeof(EnemyAttack))]
 public class EnemyController : MonoBehaviour
 {
-    public enum EnemyState { Patrolling, Chasing, Attacking }
-
-    [Header("Settings")]
-    public float chaseDistance = 5f;
-    public float attackDistance = 1.5f;
-
+    public EnemyData data;
     private Transform player;
-    private EnemyState currentState;
-
     private EnemyPatrol patrol;
     private EnemyChase chase;
     private EnemyAttack attack;
+
+    private enum EnemyState { Patrolling, Chasing, Attacking }
+    private EnemyState currentState;
 
     private void Awake()
     {
@@ -23,6 +19,11 @@ public class EnemyController : MonoBehaviour
         attack = GetComponent<EnemyAttack>();
 
         player = GameObject.FindGameObjectWithTag("Player")?.transform;
+
+        // Inizializza con dati dal SO
+        patrol.SetSpeed(data.patrolSpeed);
+        chase.SetSpeed(data.chaseSpeed);
+        attack.SetData(data);
     }
 
     private void Update()
@@ -31,15 +32,13 @@ public class EnemyController : MonoBehaviour
 
         float distance = Vector2.Distance(transform.position, player.position);
 
-        // Stato
-        if (distance <= attackDistance)
+        if (distance <= data.attackDistance)
             SetState(EnemyState.Attacking);
-        else if (distance <= chaseDistance)
+        else if (distance <= data.chaseDistance)
             SetState(EnemyState.Chasing);
         else
             SetState(EnemyState.Patrolling);
 
-        // Azioni
         patrol.enabled = currentState == EnemyState.Patrolling;
         chase.enabled = currentState == EnemyState.Chasing;
         attack.enabled = currentState == EnemyState.Attacking;

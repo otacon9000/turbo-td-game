@@ -3,13 +3,12 @@ using UnityEngine;
 
 public class EnemyAttack : MonoBehaviour
 {
-    [Header("Attack Settings")]
-    public GameObject attackHitboxPrefab;
-    public Transform attackPoint;
-    public float attackCooldown = 1.5f;
-
+    private EnemyData data;
     private bool canAttack = true;
     private Transform player;
+    public Transform attackPoint;
+
+    public void SetData(EnemyData d) => data = d;
 
     private void Start()
     {
@@ -31,15 +30,11 @@ public class EnemyAttack : MonoBehaviour
     {
         canAttack = false;
 
-        GameObject hitbox = Instantiate(attackHitboxPrefab, attackPoint.position, attackPoint.rotation);
-        MeleeHitbox melee = hitbox.GetComponent<MeleeHitbox>();
-        melee.Initialize(
-            damage: 1,                // oppure passa valore se vuoi più flessibilità
-            duration: 0.2f,
-            targetTag: "Player"
-        );
+        GameObject hitbox = Instantiate(data.attackHitboxPrefab, attackPoint.position, attackPoint.rotation);
+        var melee = hitbox.GetComponent<MeleeHitbox>();
+        melee.Initialize(data.damage, data.hitboxDuration, data.targetTag);
 
-        yield return new WaitForSeconds(attackCooldown);
+        yield return new WaitForSeconds(data.attackCooldown);
         canAttack = true;
     }
 }

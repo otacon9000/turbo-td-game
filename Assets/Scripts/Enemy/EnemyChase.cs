@@ -2,9 +2,10 @@ using UnityEngine;
 
 public class EnemyChase : MonoBehaviour
 {
-    public float speed = 2.5f;
-
     private Transform player;
+    private float speed = 2.5f;
+
+    public void SetSpeed(float s) => speed = s;
 
     private void Start()
     {

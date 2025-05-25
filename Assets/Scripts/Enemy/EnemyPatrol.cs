@@ -2,12 +2,13 @@ using UnityEngine;
 
 public class EnemyPatrol : MonoBehaviour
 {
-    [Header("Waypoints")]
     public Transform[] patrolPoints;
-    public float speed = 2f;
     public float arrivalThreshold = 0.1f;
 
     private int currentIndex = 0;
+    private float speed = 2f;
+
+    public void SetSpeed(float s) => speed = s;
 
     private void Update()
     {
@@ -18,9 +19,7 @@ public class EnemyPatrol : MonoBehaviour
         transform.position += (Vector3)(direction * speed * Time.deltaTime);
 
         if (Vector2.Distance(transform.position, targetPoint.position) <= arrivalThreshold)
-        {
             currentIndex = (currentIndex + 1) % patrolPoints.Length;
-        }
     }
 
     private void OnDrawGizmosSelected()
