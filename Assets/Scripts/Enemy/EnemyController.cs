@@ -31,9 +31,9 @@ public class EnemyController : MonoBehaviour
 
         float distance = Vector2.Distance(transform.position, player.position);
 
-        if (distance <= data.attackDistance)
+        if (distance <= data.attackDistance && distance >= data.patrolDistance)
             SetState(EnemyState.Attacking);
-        else if (distance <= data.chaseDistance)
+        else if (distance > data.attackDistance || distance < data.minAttackDistance)
             SetState(EnemyState.Chasing);
         else
             SetState(EnemyState.Patrolling);

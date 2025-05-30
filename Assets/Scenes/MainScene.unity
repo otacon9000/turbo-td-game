@@ -736,7 +736,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f83cc7e4c683f46d2a196b4b2fa8987b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  data: {fileID: 11400000, guid: 8540da3188f99a4419916c1b2c016b82, type: 2}
+  data: {fileID: 11400000, guid: 755fce215710842cea94cd8d9dd5e584, type: 2}
 --- !u!114 &1294519162
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -922,7 +922,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 546833520d092cd409d9ed8946625bfc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  projectilePrefab: {fileID: 2534131403501566631, guid: e00cf043fb65b044fbefe2f0beea510b, type: 3}
   firePoint: {fileID: 725350928}
+  attackCooldown: 1.5
+  burstCount: 5
+  timeBetweenBurstShots: 0.5
+  bulletSpeed: 5
+  bulletLifetime: 3
+  bulletDamage: 1
+  spreadAngle: 30
+  targetTag: Player
+  minDistance: 10
+  maxDistance: 20
+  moveSpeed: 3
 --- !u!1 &1815212508
 GameObject:
   m_ObjectHideFlags: 0
